@@ -4,6 +4,7 @@ import com.nada.bpaai.data.remote.response.AddNewStoryResponse
 import com.nada.bpaai.data.remote.response.ListStoryItem
 import com.nada.bpaai.data.remote.response.LoginResponse
 import com.nada.bpaai.data.remote.response.RegisterResponse
+import com.nada.bpaai.data.remote.response.StoriesResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -29,7 +30,7 @@ interface ApiService {
         @Query("page") page: Int? = null,
         @Query("size") size: Int? = null,
         @Query("location") location: Int? = 0
-    ): List<ListStoryItem>
+    ): StoriesResponse
 
     @Multipart
     @POST("stories")

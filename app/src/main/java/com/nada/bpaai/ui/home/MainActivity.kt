@@ -58,9 +58,9 @@ class MainActivity : AppCompatActivity() {
             showMessage(message)
         }
 
-        viewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
+//        viewModel.isLoading.observe(this) {
+//            showLoading(it)
+//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
