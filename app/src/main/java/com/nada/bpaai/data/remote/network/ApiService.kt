@@ -42,4 +42,10 @@ interface ApiService {
         @Part("lon") lon: Float?
     ):Call<AddNewStoryResponse>
 
+    @GET("stories")
+    fun getLocationStory(
+        @Header("Authorization") token: String,
+        @Query("location") location: Int,
+    ): Call<StoriesResponse>
+
 }

@@ -3,13 +3,14 @@ package com.nada.bpaai.ui.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
-import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nada.bpaai.R
@@ -22,6 +23,7 @@ import com.nada.bpaai.ui.ViewModelFactory
 import com.nada.bpaai.ui.addStory.AddStoryActivity
 import com.nada.bpaai.ui.detail.DetailActivity
 import com.nada.bpaai.ui.login.LoginActivity
+import com.nada.bpaai.ui.maps.MapsActivity
 
 val Context.dataStore: DataStore<androidx.datastore.preferences.core.Preferences> by preferencesDataStore(name = "settings")
 
@@ -54,9 +56,9 @@ class MainActivity : AppCompatActivity() {
             showMessage(message)
         }
 
-//        viewModel.isLoading.observe(this) {
-//            showLoading(it)
-//        }
+        viewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -74,6 +76,10 @@ class MainActivity : AppCompatActivity() {
                 true
             } R.id.logout -> {
                 userViewModel.logout()
+                true
+            } R.id.location -> {
+                val intent = Intent(this, MapsActivity::class.java)
+                startActivity(intent)
                 true
             }
             else -> true
@@ -103,7 +109,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @OptIn(ExperimentalPagingApi::class)
     private fun showRecyclerList(token: String) {
         val adapter = StoryAdapter()
         binding.rvStories.adapter = adapter.withLoadStateFooter(
@@ -122,10 +127,6 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         })
-
-    }
-
-    private fun sendData(data: ListStoryItem) {
 
     }
 

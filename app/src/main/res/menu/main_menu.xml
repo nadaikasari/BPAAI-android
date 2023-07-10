@@ -7,6 +7,11 @@
         android:title="@string/add_story"
         app:showAsAction="collapseActionView|ifRoom"/>
     <item
+        android:id="@+id/location"
+        android:icon="@drawable/ic_location"
+        android:title="@string/story_location"
+        app:showAsAction="collapseActionView|ifRoom"/>
+    <item
         android:id="@+id/logout"
         android:icon="@drawable/ic_logout"
         android:title="@string/logout"

@@ -23,4 +23,7 @@
     <string name="description_empty">Description tidak boleh kosong</string>
     <string name="data_empty">Data empty</string>
     <string name="retry">Retry</string>
+    <string name="map_icon">Map Icon\n</string>
+    <string name="yourLocation">Lokasi Anda</string>
+    <string name="story_location">Story Location</string>
 </resources>

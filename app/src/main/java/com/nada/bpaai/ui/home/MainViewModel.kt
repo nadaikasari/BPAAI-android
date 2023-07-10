@@ -14,12 +14,18 @@ import kotlinx.coroutines.launch
 
 class MainViewModel (private val storyRepository: StoryRepository) : ViewModel()  {
 
+    val listStory: LiveData<List<ListStoryItem>> = storyRepository.getListStory
+
     val message: LiveData<String> = storyRepository.getMessage
 
     val isLoading: LiveData<Boolean> = storyRepository.isLoading
 
     fun getAllStory(token: String): LiveData<PagingData<ListStoryItem>> {
         return storyRepository.getAllStory(token).cachedIn(viewModelScope)
+    }
+
+    fun getStories(token: String) {
+        storyRepository.getStory(token)
     }
 
 

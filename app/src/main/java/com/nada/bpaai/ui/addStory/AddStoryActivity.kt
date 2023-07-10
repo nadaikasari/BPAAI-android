@@ -6,11 +6,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.datastore.core.DataStore
@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.nada.bpaai.R
 import com.nada.bpaai.data.local.UserPreference
 import com.nada.bpaai.databinding.ActivityAddStoryBinding
+import com.nada.bpaai.ui.ViewModelFactory
 import com.nada.bpaai.ui.camera.CameraActivity
 import com.nada.bpaai.ui.home.MainActivity
 import com.nada.bpaai.ui.reduceFileImage
@@ -33,7 +34,6 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
-
 
 class AddStoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddStoryBinding
@@ -96,13 +96,18 @@ class AddStoryActivity : AppCompatActivity() {
         viewModel.getMessage.observe(this) { message ->
             showMessage(message)
         }
+
+//        binding.location.setOnClickListener {
+//            val intent = Intent(this, PickLocationActivity::class.java)
+//            resultLauncher.launch(intent)
+//        }
     }
 
     private fun setupViewModel() {
-//        viewModel = ViewModelProvider(
-//            this,
-//            ViewModelFactory(UserPreference.getInstance(dataStore))
-//        )[AddStoryViewModel::class.java]
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(UserPreference.getInstance(dataStore))
+        )[AddStoryViewModel::class.java]
     }
 
     private fun startGallery() {
