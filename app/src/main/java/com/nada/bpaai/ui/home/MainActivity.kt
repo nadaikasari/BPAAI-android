@@ -3,7 +3,6 @@ package com.nada.bpaai.ui.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,14 +12,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.nada.bpaai.R
 import com.nada.bpaai.adapter.LoadingStateAdapter
 import com.nada.bpaai.data.local.UserPreference
+import com.nada.bpaai.data.remote.response.ListStoryItem
 import com.nada.bpaai.databinding.ActivityMainBinding
 import com.nada.bpaai.ui.MainViewModelFactory
 import com.nada.bpaai.ui.ViewModelFactory
 import com.nada.bpaai.ui.addStory.AddStoryActivity
+import com.nada.bpaai.ui.detail.DetailActivity
 import com.nada.bpaai.ui.login.LoginActivity
 
 val Context.dataStore: DataStore<androidx.datastore.preferences.core.Preferences> by preferencesDataStore(name = "settings")
@@ -40,17 +40,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val layoutManager = LinearLayoutManager(this)
-        binding.rvStories.layoutManager = layoutManager
-        val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
-        binding.rvStories.addItemDecoration(itemDecoration)
+        setupView()
 
         userViewModel = ViewModelProvider(
             this,
             ViewModelFactory(UserPreference.getInstance(dataStore))
         )[UserViewModel::class.java]
 
-//        setupView()
         getUserToken()
         isUserLogin()
 
@@ -118,6 +114,18 @@ class MainActivity : AppCompatActivity() {
         viewModel.getAllStory(token).observe(this) {
             adapter.submitData(lifecycle, it)
         }
+
+        adapter.setOnItemClickCallback(object : StoryAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: ListStoryItem) {
+                val intent = Intent(this@MainActivity, DetailActivity::class.java)
+                intent.putExtra(DetailActivity.EXTRA_DATA, data)
+                startActivity(intent)
+            }
+        })
+
+    }
+
+    private fun sendData(data: ListStoryItem) {
 
     }
 

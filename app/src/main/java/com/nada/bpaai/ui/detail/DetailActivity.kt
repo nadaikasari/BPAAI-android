@@ -46,7 +46,6 @@ class DetailActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-
     companion object {
         const val EXTRA_DATA = "extra_data"
     }

@@ -1,9 +1,12 @@
 package com.nada.bpaai.ui.home
 
+import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +25,9 @@ class StoryAdapter : PagingDataAdapter<ListStoryItem, StoryAdapter.ViewHolder>(D
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }
+        holder.itemView.setOnClickListener {
+            getItem(position)?.let { data -> onItemClickCallback.onItemClicked(data) }
+        }
     }
 
     class ViewHolder(private val binding: ListStoriesBinding) :
@@ -34,34 +40,20 @@ class StoryAdapter : PagingDataAdapter<ListStoryItem, StoryAdapter.ViewHolder>(D
                 Glide.with(itemView.context)
                     .load(data.photoUrl)
                     .into(ivItemImage)
-
-//                Log.d("DATAWOI", data.name.toString())
-
-//                root.setOnClickListener {
-//                    val moveToDetail = Intent(itemView.context, DetailActivity::class.java)
-
-//                    moveToDetail.putExtra(EXTRA_USER_NAME, data.name)
-//                    moveToDetail.putExtra(EXTRA_UPLOAD_DATE, data.createdAt)
-//                    moveToDetail.putExtra(EXTRA_CAPTION, data.description)
-//                    moveToDetail.putExtra(EXTRA_IMAGE, data.photoUrl)
-//
-//                    val optionsCompat: ActivityOptionsCompat =
-//                        ActivityOptionsCompat.makeSceneTransitionAnimation(
-//                            itemView.context as Activity,
-//                            Pair(ivStory, "story_image"),
-//                            Pair(tvUploadDate, "upload_date"),
-//                            Pair(tvUserName, "user_name"),
-//                            Pair(tvCaption, "caption"),
-//                        )
-
-//                    itemView.context.startActivity(moveToDetail, optionsCompat.toBundle())
-//                }
             }
         }
     }
 
+    private lateinit var onItemClickCallback: OnItemClickCallback
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
+    interface OnItemClickCallback {
+        fun onItemClicked(data: ListStoryItem)
+    }
+
     companion object {
-        val DiffCallback = object : DiffUtil.ItemCallback<ListStoryItem>() {
+        private val DiffCallback = object : DiffUtil.ItemCallback<ListStoryItem>() {
             override fun areItemsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
                 return oldItem.id == newItem.id
             }

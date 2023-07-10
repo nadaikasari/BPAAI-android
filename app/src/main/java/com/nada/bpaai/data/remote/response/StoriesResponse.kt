@@ -1,8 +1,10 @@
 package com.nada.bpaai.data.remote.response
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 data class StoriesResponse(
 
@@ -16,6 +18,7 @@ data class StoriesResponse(
 	val message: String? = null
 )
 
+@Parcelize
 @Entity(tableName = "stories")
 data class ListStoryItem(
 
@@ -38,4 +41,4 @@ data class ListStoryItem(
 	@field:SerializedName("lon")
 	val lon: Double? = null
 
-)
+) : Parcelable
