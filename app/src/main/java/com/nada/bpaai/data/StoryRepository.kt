@@ -47,16 +47,6 @@ class StoryRepository(
             }
         })
     }
-//
-//    fun getDataUser(): LiveData<UserModel> {
-//        return pref.getUser().asLiveData()
-//    }
-//
-//    fun logout() {
-//        viewModelScope.launch {
-//            pref.logout()
-//        }
-//    }
 
     fun getAllStory(token: String): LiveData<PagingData<ListStoryItem>> {
         @OptIn(ExperimentalPagingApi::class)

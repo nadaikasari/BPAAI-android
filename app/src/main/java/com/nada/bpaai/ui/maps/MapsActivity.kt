@@ -1,12 +1,9 @@
 package com.nada.bpaai.ui.maps
 
-import android.content.ContentValues
-import android.content.res.Resources
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -14,7 +11,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.nada.bpaai.R
 import com.nada.bpaai.data.local.UserPreference
@@ -60,7 +56,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapsViewModel.isLoading.observe(this) {
             showLoading(it)
         }
-        setMapStyle()
     }
 
     private fun getData() {
@@ -84,12 +79,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         data.forEach {
             if (it.lat != null && it.lon != null) {
                 val latLng = LatLng(it.lat, it.lon)
-                val address = LocationConverter.getStringAddress(latLng, this)
                 val marker = mMap.addMarker(
                     MarkerOptions()
                         .position(latLng)
                         .title(it.name)
-                        .snippet(address)
+                        .snippet(it.description)
                 )
                 boundBuilder.include(latLng)
                 marker?.tag = it
@@ -116,22 +110,5 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         onBackPressedDispatcher.onBackPressed()
         finish()
         return super.onSupportNavigateUp()
-    }
-
-    private fun setMapStyle() {
-        try {
-            val success =
-                mMap.setMapStyle(
-                    MapStyleOptions.loadRawResourceStyle(
-                        this,
-                        R.raw.maps_standard
-                    )
-                )
-            if (!success) {
-                Log.e(ContentValues.TAG, "Style parsing failed.")
-            }
-        } catch (exception: Resources.NotFoundException) {
-            Log.e(ContentValues.TAG, "Can't find style. Error: ", exception)
-        }
     }
 }

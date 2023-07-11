@@ -2,7 +2,6 @@ package com.nada.bpaai.di
 
 import android.content.Context
 import com.nada.bpaai.data.StoryRepository
-import com.nada.bpaai.data.local.UserPreference
 import com.nada.bpaai.data.remote.network.ApiConfig
 import com.nada.bpaai.database.StoryDatabase
 

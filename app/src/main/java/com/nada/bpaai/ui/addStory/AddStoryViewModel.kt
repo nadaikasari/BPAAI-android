@@ -28,25 +28,25 @@ class AddStoryViewModel(private val pref: UserPreference) : ViewModel() {
 
     fun uploadStory (token: String, file: MultipartBody.Part, description: RequestBody) {
         _isLoading.value = true
-//        val client = ApiConfig.getApiService().uploadStory("Bearer $token", file, description)
-//        client.enqueue(object : Callback<AddNewStoryResponse> {
-//            override fun onResponse(
-//                call: Call<AddNewStoryResponse>,
-//                response: Response<AddNewStoryResponse>
-//            ) {
-//                _isLoading.value = false
-//                if (response.isSuccessful) {
-//                    Log.e("addResponse", "onResponse: ${response.message()}")
-//                    _response.value = response.body()
-//                } else {
-//                    _message.value = response.message()
-//                }
-//            }
-//            override fun onFailure(call: Call<AddNewStoryResponse>, t: Throwable) {
-//                _isLoading.value = false
-//                _message.value = t.message.toString()
-//            }
-//        })
+        val client = ApiConfig.getApiService().uploadStory("Bearer $token", file, description)
+        client.enqueue(object : Callback<AddNewStoryResponse> {
+            override fun onResponse(
+                call: Call<AddNewStoryResponse>,
+                response: Response<AddNewStoryResponse>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    Log.e("addResponse", "onResponse: ${response.message()}")
+                    _response.value = response.body()
+                } else {
+                    _message.value = response.message()
+                }
+            }
+            override fun onFailure(call: Call<AddNewStoryResponse>, t: Throwable) {
+                _isLoading.value = false
+                _message.value = t.message.toString()
+            }
+        })
     }
 
     fun getDataUser(): LiveData<UserModel> {

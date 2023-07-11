@@ -42,13 +42,13 @@ class RegisterActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        viewModel.isLoading.observe(this, {
+        viewModel.isLoading.observe(this) {
             showLoading(it)
-        })
+        }
 
-        viewModel.getMessage.observe(this, { message ->
+        viewModel.getMessage.observe(this) { message ->
             showMessage(message)
-        })
+        }
     }
 
     private fun setupView() {

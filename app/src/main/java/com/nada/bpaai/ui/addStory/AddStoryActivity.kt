@@ -36,6 +36,7 @@ import java.io.File
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class AddStoryActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityAddStoryBinding
     private lateinit var viewModel: AddStoryViewModel
 
@@ -81,7 +82,7 @@ class AddStoryActivity : AppCompatActivity() {
         binding.cameraButton.setOnClickListener { startCameraX() }
         binding.galleryButton.setOnClickListener { startGallery() }
         binding.uploadButton.setOnClickListener {
-            val desc = binding.edtDescription.text.toString().trim();
+            val desc = binding.edtDescription.text.toString().trim()
             if(desc.isNotEmpty()) {
                 uploadImage()
             } else {
@@ -96,11 +97,6 @@ class AddStoryActivity : AppCompatActivity() {
         viewModel.getMessage.observe(this) { message ->
             showMessage(message)
         }
-
-//        binding.location.setOnClickListener {
-//            val intent = Intent(this, PickLocationActivity::class.java)
-//            resultLauncher.launch(intent)
-//        }
     }
 
     private fun setupViewModel() {
