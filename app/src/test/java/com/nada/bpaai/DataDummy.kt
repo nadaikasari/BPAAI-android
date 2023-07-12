@@ -35,18 +35,4 @@ object DataDummy {
         }
         return newsList
     }
-
-
-//    fun generateDummyRequestLogin(): LoginDataAccount {
-//        return LoginDataAccount("kopret1@gmail.com", "12345678")
-//    }
-//
-//    fun generateDummyResponseLogin(): ResponseLogin {
-//        val newLoginResult = LoginResult("qwerty", "kevin", "ini-token")
-//        return ResponseLogin(false, "Login successfully", newLoginResult)
-//    }
-//
-//    fun generateDummyRequestRegister(): RegisterDataAccount {
-//        return RegisterDataAccount("kevin", "123@gmail.com", "12345678")
-//    }
 }

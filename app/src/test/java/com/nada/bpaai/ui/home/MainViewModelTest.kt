@@ -9,7 +9,9 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import androidx.recyclerview.widget.ListUpdateCallback
 import com.nada.bpaai.DataDummy.generateDummyNewStory
+import com.nada.bpaai.DataDummy.generateDummyStoryResponse
 import com.nada.bpaai.MainDispatcherRule
+import com.nada.bpaai.data.StoryRepository
 import com.nada.bpaai.data.remote.response.ListStoryItem
 import com.nada.bpaai.getOrAwaitValue
 import kotlinx.coroutines.Dispatchers
@@ -37,19 +39,20 @@ class MainViewModelTest {
     val mainDispatcherRules = MainDispatcherRule()
 
     @Mock
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var storyRepository: StoryRepository
 
     private val dummyToken = "authentication_token"
 
     @Test
     fun `When Get Data Story Should Not Return Null`() = runTest {
-        val dummyStories = generateDummyNewStory()
-        val data = PagedTestDataSources.snapshot(dummyStories)
+        val dummyStories = generateDummyStoryResponse()
+        val data: PagingData<ListStoryItem> = PagedTestDataSources.snapshot(dummyStories)
         val story = MutableLiveData<PagingData<ListStoryItem>>()
 
         story.value = data
-        `when`(mainViewModel.getAllStory(dummyToken)).thenReturn(story)
-        val actualData = mainViewModel.getAllStory(dummyToken).getOrAwaitValue()
+        `when`(storyRepository.getAllStory(dummyToken)).thenReturn(story)
+        val mainViewModel = MainViewModel(storyRepository)
+        val actualData: PagingData<ListStoryItem> = mainViewModel.getAllStory(dummyToken).getOrAwaitValue()
 
         val differ = AsyncPagingDataDiffer(
             diffCallback = StoryAdapter.DiffCallback,
@@ -60,20 +63,25 @@ class MainViewModelTest {
         differ.submitData(actualData)
 
         advanceUntilIdle()
-        Mockito.verify(mainViewModel).getAllStory(dummyToken)
+
         Assert.assertNotNull(differ.snapshot())
         Assert.assertEquals(dummyStories.size, differ.snapshot().size)
+        Assert.assertEquals(dummyStories[0].id, differ.snapshot()[0]?.id)
         Assert.assertEquals(dummyStories[0].name, differ.snapshot()[0]?.name)
+        Assert.assertEquals(dummyStories[0].description, differ.snapshot()[0]?.description)
+        Assert.assertEquals(dummyStories[0].lat, differ.snapshot()[0]?.lat)
+        Assert.assertEquals(dummyStories[0].lon, differ.snapshot()[0]?.lon)
     }
 
     @Test
     fun `when Get Data Story is Empty Should Return Null`() = runTest {
-        val data = PagedTestDataSources.snapshot(listOf())
+        val data: PagingData<ListStoryItem> = PagedTestDataSources.snapshot(listOf())
         val story = MutableLiveData<PagingData<ListStoryItem>>()
 
         story.value = data
-        `when`(mainViewModel.getAllStory(dummyToken)).thenReturn(story)
-        val actualData = mainViewModel.getAllStory(dummyToken).getOrAwaitValue()
+        `when`(storyRepository.getAllStory(dummyToken)).thenReturn(story)
+        val mainViewModel = MainViewModel(storyRepository)
+        val actualData: PagingData<ListStoryItem> = mainViewModel.getAllStory(dummyToken).getOrAwaitValue()
 
         val differ = AsyncPagingDataDiffer(
             diffCallback = StoryAdapter.DiffCallback,
@@ -84,7 +92,7 @@ class MainViewModelTest {
         differ.submitData(actualData)
 
         advanceUntilIdle()
-        Mockito.verify(mainViewModel).getAllStory(dummyToken)
+
         Assert.assertNotNull(differ.snapshot())
         Assert.assertTrue(differ.snapshot().isEmpty())
         Assert.assertEquals(0, differ.snapshot().size)
